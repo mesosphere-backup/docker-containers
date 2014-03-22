@@ -2,7 +2,7 @@ FROM stackbrew/ubuntu:13.10
 MAINTAINER Mesosphere support@mesosphere.io
 
 RUN ["env", "DEBIAN_FRONTEND=noninteractive", "apt-get", "update"]
-RUN ["env", "DEBIAN_FRONTEND=noninteractive", "apt-get", "install", "-y", "--force-yes", "python2.7", "libsasl2-2", "libcurl3"]
+RUN ["env", "DEBIAN_FRONTEND=noninteractive", "apt-get", "install", "-y", "--force-yes", "python2.7", "libsasl2-2", "libcurl3", "curl", "wget"]
 RUN ["env", "DEBIAN_FRONTEND=noninteractive", "apt-get", "install", "-y", "--force-yes", "python", "python-setuptools", "python-pip", "python-protobuf"]
 RUN ["env", "DEBIAN_FRONTEND=noninteractive", "apt-get", "install", "-y", "--force-yes", "default-jre-headless"]
 
