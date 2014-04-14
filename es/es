@@ -11,5 +11,5 @@ RUN rm elasticsearch-1.1.0.tar.gz
 #   - 9300: transport
 EXPOSE 9200 9300
 
-ENTRYPOINT ["/opt/elasticsearch/bin/elasticsearch"]
+CMD ["/opt/elasticsearch/bin/elasticsearch"]
 
