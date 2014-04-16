@@ -1,0 +1,11 @@
+#!/bin/bash
+
+VERSION=$1
+
+# Download and extract
+wget http://archive.apache.org/dist/cassandra/$VERSION/apache-cassandra-$VERSION-bin.tar.gz
+tar -xvzf apache-cassandra-$VERSION-bin.tar.gz
+rm -f apache-cassandra-$VERSION-bin.tar.gz
+mkdir -p /opt
+mv apache-cassandra-$VERSION /opt/
+ln -sf /opt/apache-cassandra-$VERSION /opt/apache-cassandra
