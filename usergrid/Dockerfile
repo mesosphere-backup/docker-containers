@@ -11,8 +11,6 @@ RUN cd usergrid/stack && mvn clean install -DskipTests=true
 RUN mkdir -p /opt/usergrid/stack/launcher
 RUN cp -rp usergrid/stack/launcher/target /opt/usergrid/stack/launcher/
 
-RUN rm -rf usergrid
-
 CMD cd /opt/usergrid/stack/launcher && \
     java -Xmx1G -jar target/usergrid-launcher-*-SNAPSHOT.jar -db -init -nogui
 
