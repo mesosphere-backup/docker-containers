@@ -21,17 +21,17 @@ push: check-version
 	sudo docker push mesosphere/mesos-master:$(VERSION)
 	sudo docker push mesosphere/mesos-slave:$(VERSION)
 
-mesos:
+mesos: check-version
 	sed -e "s/VERSION/$(VERSION)/g" dockerfile-templates/$@ > Dockerfile
 	sudo docker build -t mesosphere/$@:$(VERSION) .
 	rm -f Dockerfile
 
-mesos-master: mesos
+mesos-master: mesos check-version
 	sed -e "s/VERSION/$(VERSION)/g" dockerfile-templates/$@ > Dockerfile
 	sudo docker build -t mesosphere/$@:$(VERSION) .
 	rm -f Dockerfile
 
-mesos-slave: mesos
+mesos-slave: mesos check-version
 	sed -e "s/VERSION/$(VERSION)/g" dockerfile-templates/$@ > Dockerfile
 	sudo docker build -t mesosphere/$@:$(VERSION) .
 	rm -f Dockerfile
