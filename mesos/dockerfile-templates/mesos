@@ -1,7 +1,11 @@
-FROM ubuntu:14.04
+FROM java:7-jre
 MAINTAINER Mesosphere <support@mesosphere.io>
 
-RUN echo "deb http://repos.mesosphere.io/ubuntu/ trusty main" > /etc/apt/sources.list.d/mesosphere.list
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv E56151BF
-RUN apt-get -y update
-RUN apt-get -y install mesos=VERSION
+ENV MESOS_LOG_DIR /var/log
+
+RUN \
+  echo "deb http://repos.mesosphere.io/debian/ wheezy main" > /etc/apt/sources.list.d/mesosphere.list && \
+  apt-key adv --keyserver keyserver.ubuntu.com --recv E56151BF && \
+  apt-get -y update && \
+  apt-get -y --no-install-recommends install mesos=VERSION && \
+  apt-get clean
