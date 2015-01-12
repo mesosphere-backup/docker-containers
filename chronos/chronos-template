@@ -7,4 +7,4 @@ RUN rm -rf /etc/chronos/conf
 
 EXPOSE 4400
 
-CMD ["/usr/local/bin/chronos", "--http_port=4400", "--zk_hosts=localhost:2181","--master=zk://localhost:2181"]
+CMD ["/usr/local/bin/chronos", "run_jar", "--http_port", "4400", "--zk_hosts",  "localhost:2181", "--master", "zk://localhost:2181"]
