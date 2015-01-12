@@ -1,0 +1,8 @@
+FROM mesosphere/mesos:MESOS_VERSION
+MAINTAINER Mesosphere <support@mesosphere.io>
+
+RUN apt-get -y install chronos=CHRONOS_VERSION
+
+VOLUME ["/etc/chronos/conf", "/etc/mesos/zk"]
+
+CMD ["/usr/local/bin/chronos"]
