@@ -2,7 +2,9 @@ FROM mesosphere/mesos:MESOS_VERSION
 MAINTAINER Mesosphere <support@mesosphere.io>
 
 RUN apt-get -y install chronos=CHRONOS_VERSION
+RUN rm -rf /etc/mesos
+RUN rm -rf /etc/chronos/conf
 
-VOLUME ["/etc/chronos/conf", "/etc/mesos/zk"]
+EXPOSE 4400
 
-CMD ["/usr/local/bin/chronos"]
+CMD ["/usr/local/bin/chronos", "--http_port=4400", "--zk_hosts=localhost:2181","--master=zk://localhost:2181"]
