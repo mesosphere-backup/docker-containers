@@ -1,7 +1,7 @@
 FROM mesosphere/mesos:MESOS_VERSION
 MAINTAINER Mesosphere <support@mesosphere.io>
 
-RUN apt-get -y install chronos=CHRONOS_VERSION
+RUN apt-get update && apt-get -y install chronos=CHRONOS_VERSION
 RUN rm -rf /etc/mesos
 RUN rm -rf /etc/chronos/conf
 
