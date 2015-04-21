@@ -17,7 +17,7 @@ CHRONOS_VERSION=${1}
 MESOS_VERSION=${2}
 
 FULL_VERSION="chronos-$CHRONOS_VERSION-mesos-$MESOS_VERSION"
-echo "$FULL_VERSION" > docker_tag
+echo "$FULL_VERSION" > docker-tag
 
 CHRONOS_PKG=$(shopt -s nullglob; echo chronos_*${CHRONOS_VERSION}*.deb)
 if test -n "$CHRONOS_PKG"
