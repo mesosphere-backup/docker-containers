@@ -1,0 +1,11 @@
+FROM mesosphere/mesos:MESOS_VERSION
+MAINTAINER Mesosphere <support@mesosphere.io>
+
+COPY CHRONOS_PKG .
+RUN apt-get update && apt-get -y install curl && dpkg -i CHRONOS_PKG
+RUN rm -rf /etc/mesos
+RUN rm -rf /etc/chronos/conf
+
+EXPOSE 4400
+
+CMD ["/usr/bin/chronos", "run_jar", "--http_port", "4400", "--zk_hosts",  "localhost:2181", "--master", "zk://localhost:2181"]
