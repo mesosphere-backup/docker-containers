@@ -5,7 +5,7 @@ MAINTAINER Mesosphere, Inc. <support@mesosphere.io>
 RUN echo "deb http://repos.mesosphere.io/ubuntu trusty main" > \
       /etc/apt/sources.list.d/mesosphere.list && \
     apt-key adv --keyserver keyserver.ubuntu.com --recv E56151BF && \
-    echo "deb http://repos.mesosphere.io/ubuntu trusty-testing main" > /etc/apt/sources.list.d/mesosphere-testing.list \
+    echo "deb http://repos.mesosphere.io/ubuntu trusty-testing main" > /etc/apt/sources.list.d/mesosphere-testing.list && \
     apt-get update && \
     apt-get install -y openjdk-7-jre-headless mesos marathon=0.8.2-1.0.239.ubuntu1404 zookeeper git && \
     apt-get clean
