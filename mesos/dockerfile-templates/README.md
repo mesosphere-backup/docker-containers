@@ -102,10 +102,10 @@ Therefore, the somewhat hacked `mesos-executor` binary resolves the recovery iss
 
 ###Notes
 * The process `sh -c logs() ...` gets killed no matter what. This probably would need changes in the Mesos code.
-** What this means is, that some logs are lost forever.
+  * What this means is, that some logs are lost forever.
 * Also, the Python process in the Mesos slave container dies and therefore does not call `cli.remove_container()`.
-** This leads to potential left-over, exited containers on the host.
-** Workaround this with a cron job removing all the exited containers (the garbage collection of Mesos does ignore them AFAIK).
+  * This leads to potential left-over, exited containers on the host.
+  * Workaround this with a cron job removing all the exited containers (the garbage collection of Mesos does ignore them AFAIK).
 * Use `executor-mesos-<UUID>` as container name.
-** Otherwise Mesos slave will kill it upon restart.
-** I don't know if it has to be a leading `executor-` but I'm sure it has to contain the executor id (`mesos-<UUID>`).
+  * Otherwise Mesos slave will kill it upon restart.
+  * I don't know if it has to be a leading `executor-` but I'm sure it has to contain the executor id (`mesos-<UUID>`).
