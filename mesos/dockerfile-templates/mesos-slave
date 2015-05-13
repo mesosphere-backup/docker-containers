@@ -1,4 +1,14 @@
 FROM mesosphere/mesos:VERSION
+#FROM mesosphere/mesos:0.21.1-1.1.ubuntu1404
 MAINTAINER Mesosphere <support@mesosphere.io>
+
+RUN apt-get install -y wget
+RUN wget https://raw.github.com/pypa/pip/master/contrib/get-pip.py
+RUN python get-pip.py
+RUN pip install docker-py==1.1.0
+
+RUN mv /usr/libexec/mesos/mesos-executor /usr/libexec/mesos/mesos-executor.orig
+COPY files/mesos-executor.py /usr/libexec/mesos/mesos-executor
+RUN chmod +x /usr/libexec/mesos/mesos-executor
 
 ENTRYPOINT ["mesos-slave"]
