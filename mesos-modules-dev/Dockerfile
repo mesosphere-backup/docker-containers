@@ -2,10 +2,14 @@ FROM ubuntu-upstart:14.04
 MAINTAINER Mesosphere <support@mesosphere.io>
 
 # Install Dependencies
+
+RUN apt-get -qy install software-properties-common # (for add-apt-repository)
+RUN add-apt-repository ppa:george-edison55/cmake-3.x
 RUN apt-get update -q && apt-get -qy install \
   build-essential                 \
   autoconf                        \
   automake                        \
+  cmake=3.2.1-1ppa3~trusty1       \
   ca-certificates                 \
   gdb                             \
   wget                            \
@@ -28,6 +32,7 @@ RUN apt-get update -q && apt-get -qy install \
   python-setuptools               \
   heimdal-clients                 \
   libsasl2-modules-gssapi-heimdal \
+  unzip                           \
   --no-install-recommends
 
 # Prepare to build Mesos
@@ -39,7 +44,7 @@ RUN mv protobuf.jar /usr/share/java/
 
 WORKDIR /mesos
 
-#Clone Mesos
+# Clone Mesos
 RUN git clone git://git.apache.org/mesos.git /mesos
 RUN git checkout 0.22.1
 
