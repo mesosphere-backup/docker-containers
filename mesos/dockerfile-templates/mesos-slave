@@ -2,3 +2,6 @@ FROM mesosphere/mesos:VERSION
 MAINTAINER Mesosphere <support@mesosphere.io>
 
 ENTRYPOINT ["mesos-slave"]
+
+# iptables used by kubernetes-mesos proxy
+RUN apt-get install -y iptables
