@@ -35,6 +35,9 @@ RUN apt-get update -q && apt-get -qy install \
   unzip                           \
   --no-install-recommends
 
+# Install the picojson headers
+RUN wget https://raw.githubusercontent.com/kazuho/picojson/v1.3.0/picojson.h -O /usr/local/include/picojson.h
+
 # Prepare to build Mesos
 RUN mkdir -p /mesos
 RUN mkdir -p /tmp
