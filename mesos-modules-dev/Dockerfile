@@ -55,7 +55,8 @@ RUN git checkout master
 RUN ./bootstrap
 
 # Configure
-RUN mkdir build && cd build && ../configure --with-glog=/usr/local --with-protobuf=/usr --with-boost=/usr/local --disable-java --disable-optimize --without-included-zookeeper
+# TODO(CD): re-introduce flags to unbundle dependencies.
+RUN mkdir build && cd build && ../configure --disable-java --disable-optimize --without-included-zookeeper # --with-glog=/usr/local --with-protobuf=/usr --with-boost=/usr/local
 
 # Build Mesos
 RUN cd build && make -j 2 install
