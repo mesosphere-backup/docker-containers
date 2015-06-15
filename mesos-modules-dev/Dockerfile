@@ -62,5 +62,5 @@ RUN mkdir build && cd build && ../configure --disable-java --disable-optimize --
 RUN cd build && make -j 2 install
 
 # Install python eggs
-RUN easy_install /mesos/build/src/python/dist/mesos.interface-0.22.1-py2.7.egg
-RUN easy_install /mesos/build/src/python/dist/mesos.native-0.22.1-py2.7-linux-x86_64.egg
+RUN easy_install /mesos/build/src/python/dist/mesos.interface-*.egg
+RUN easy_install /mesos/build/src/python/dist/mesos.native-*.egg
