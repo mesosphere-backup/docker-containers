@@ -50,6 +50,7 @@ WORKDIR /mesos
 # Clone Mesos (master branch)
 RUN git clone git://git.apache.org/mesos.git /mesos
 RUN git checkout master
+RUN git log -n 1
 
 # Bootstrap
 RUN ./bootstrap
