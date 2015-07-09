@@ -6,34 +6,36 @@ MAINTAINER Mesosphere <support@mesosphere.io>
 RUN apt-get update -q --fix-missing
 RUN apt-get -qy install software-properties-common # (for add-apt-repository)
 RUN add-apt-repository ppa:george-edison55/cmake-3.x
+RUN apt-get update -q
+RUN apt-cache policy cmake
 RUN apt-get -qy install \
-  build-essential                 \
-  autoconf                        \
-  automake                        \
-  cmake=3.2.1-1ppa3~trusty1       \
-  ca-certificates                 \
-  gdb                             \
-  wget                            \
-  git-core                        \
-  libcurl4-nss-dev                \
-  libsasl2-dev                    \
-  libtool                         \
-  libsvn-dev                      \
-  libapr1-dev                     \
-  libgoogle-glog-dev              \
-  libboost-dev                    \
-  protobuf-compiler               \
-  libprotobuf-dev                 \
-  make                            \
-  python                          \
-  python2.7                       \
-  libpython-dev                   \
-  python-dev                      \
-  python-protobuf                 \
-  python-setuptools               \
-  heimdal-clients                 \
-  libsasl2-modules-gssapi-heimdal \
-  unzip                           \
+  build-essential                         \
+  autoconf                                \
+  automake                                \
+  cmake=3.2.2-2ubuntu2~ubuntu14.04.1~ppa1 \
+  ca-certificates                         \
+  gdb                                     \
+  wget                                    \
+  git-core                                \
+  libcurl4-nss-dev                        \
+  libsasl2-dev                            \
+  libtool                                 \
+  libsvn-dev                              \
+  libapr1-dev                             \
+  libgoogle-glog-dev                      \
+  libboost-dev                            \
+  protobuf-compiler                       \
+  libprotobuf-dev                         \
+  make                                    \
+  python                                  \
+  python2.7                               \
+  libpython-dev                           \
+  python-dev                              \
+  python-protobuf                         \
+  python-setuptools                       \
+  heimdal-clients                         \
+  libsasl2-modules-gssapi-heimdal         \
+  unzip                                   \
   --no-install-recommends
 
 # Install the picojson headers
