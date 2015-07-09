@@ -3,9 +3,10 @@ MAINTAINER Mesosphere <support@mesosphere.io>
 
 # Install Dependencies
 
+RUN apt-get update -q --fix-missing
 RUN apt-get -qy install software-properties-common # (for add-apt-repository)
 RUN add-apt-repository ppa:george-edison55/cmake-3.x
-RUN apt-get update -q && apt-get -qy install \
+RUN apt-get -qy install \
   build-essential                 \
   autoconf                        \
   automake                        \
