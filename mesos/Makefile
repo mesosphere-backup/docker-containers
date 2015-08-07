@@ -22,16 +22,13 @@ push: check-version
 	docker push mesosphere/mesos-slave:$(VERSION)
 
 mesos: check-version
-	sed "s/VERSION/$(VERSION)/g" dockerfile-templates/$@ > Dockerfile
-	docker build -t mesosphere/$@:$(VERSION) .
-	rm -f Dockerfile
+	sed "s/VERSION/$(VERSION)/g" dockerfile-templates/$@ > $@
+	docker build -t mesosphere/$@:$(VERSION) - < $@
 
 mesos-master: mesos check-version
-	sed "s/VERSION/$(VERSION)/g" dockerfile-templates/$@ > Dockerfile
-	docker build -t mesosphere/$@:$(VERSION) .
-	rm -f Dockerfile
+	sed "s/VERSION/$(VERSION)/g" dockerfile-templates/$@ > $@
+	docker build -t mesosphere/$@:$(VERSION) - < $@
 
 mesos-slave: mesos check-version
-	sed "s/VERSION/$(VERSION)/g" dockerfile-templates/$@ > Dockerfile
-	docker build -t mesosphere/$@:$(VERSION) .
-	rm -f Dockerfile
+	sed "s/VERSION/$(VERSION)/g" dockerfile-templates/$@ > $@
+	docker build -t mesosphere/$@:$(VERSION) - < $@
