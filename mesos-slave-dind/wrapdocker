@@ -139,9 +139,19 @@ echo "Using network $FIXED_CIDR for docker containers"
 # stop docker daemon on shutdown to avoid loopback leaks
 trap "service docker stop" EXIT
 
+# find supported filesystem
+if grep -q aufs /proc/filesystems; then
+    FS=aufs
+elif grep -q aufs /proc/filesystems; then
+    FS=overlay
+else
+    echo "No support filesystem found"
+    exit 1
+fi
+
 # let docker reuse the given IP. If you run more than one dind slave, add
 # --fixed-cidr=a.b.c.d/24 to DOCKER_DAEMON_ARGS with disjunct networks.
-DOCKER_DAEMON_ARGS="$DOCKER_DAEMON_ARGS --bip $IP_CIDR --fixed-cidr=$FIXED_CIDR --storage-driver=aufs"
+DOCKER_DAEMON_ARGS="$DOCKER_DAEMON_ARGS --bip $IP_CIDR --fixed-cidr=$FIXED_CIDR --storage-driver=$FS"
 
 # start docker daemon
 if [ "$LOG" == "file" ]; then
