@@ -87,13 +87,23 @@ do
 done
 popd >/dev/null
 
-# create a ext3 loop device to be able to host docker's aufs
-mkdir -p /data
-if [ ! -f /data/docker ]; then
-    dd if=/dev/zero of=/data/docker bs=1G seek=${VAR_LIB_DOCKER_SIZE:-5} count=0
-    echo y | mkfs.ext3 /data/docker
+# find supported filesystem
+if grep -q aufs /proc/filesystems; then
+    FS=aufs
+
+    # create a ext3 loop device to be able to host docker's aufs
+    mkdir -p /data
+    if [ ! -f /data/docker ]; then
+        dd if=/dev/zero of=/data/docker bs=1G seek=${VAR_LIB_DOCKER_SIZE:-5} count=0
+        echo y | mkfs.ext3 /data/docker
+    fi
+    mount -o loop /data/docker /var/lib/docker
+elif grep -q overlay /proc/filesystems; then
+    FS=overlay
+else
+    echo "No support filesystem found"
+    exit 1
 fi
-mount -o loop /data/docker /var/lib/docker
 
 # If a pidfile is still around (for example after a container restart),
 # delete it so that docker can start.
@@ -138,16 +148,6 @@ echo "Using network $FIXED_CIDR for docker containers"
 
 # stop docker daemon on shutdown to avoid loopback leaks
 trap "service docker stop" EXIT
-
-# find supported filesystem
-if grep -q aufs /proc/filesystems; then
-    FS=aufs
-elif grep -q overlay /proc/filesystems; then
-    FS=overlay
-else
-    echo "No support filesystem found"
-    exit 1
-fi
 
 # let docker reuse the given IP. If you run more than one dind slave, add
 # --fixed-cidr=a.b.c.d/24 to DOCKER_DAEMON_ARGS with disjunct networks.
