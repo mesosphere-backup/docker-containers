@@ -90,7 +90,7 @@ popd >/dev/null
 # create a ext3 loop device to be able to host docker's aufs
 mkdir -p /data
 if [ ! -f /data/docker ]; then
-    fallocate -l 5G /data/docker
+    dd if=/dev/zero of=/data/docker bs=1G seek=${VAR_LIB_DOCKER_SIZE:-5} count=0
     echo y | mkfs.ext3 /data/docker
 fi
 mount -o loop /data/docker /var/lib/docker
