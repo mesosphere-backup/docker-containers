@@ -87,6 +87,13 @@ do
 done
 popd >/dev/null
 
+# create a ext3 loop device to be able to host docker's aufs
+mkdir -p /data
+if [ ! -f /data/docker ]; then
+    fallocate -l 5G /data/docker
+    echo y | mkfs.ext3 /data/docker
+fi
+mount -o loop /data/docker /var/lib/docker
 
 # If a pidfile is still around (for example after a container restart),
 # delete it so that docker can start.
