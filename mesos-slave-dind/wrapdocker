@@ -142,7 +142,7 @@ trap "service docker stop" EXIT
 # find supported filesystem
 if grep -q aufs /proc/filesystems; then
     FS=aufs
-elif grep -q aufs /proc/filesystems; then
+elif grep -q overlay /proc/filesystems; then
     FS=overlay
 else
     echo "No support filesystem found"
