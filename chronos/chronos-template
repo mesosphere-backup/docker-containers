@@ -7,4 +7,8 @@ RUN rm -rf /etc/chronos/conf
 
 EXPOSE 4400
 
+COPY bin/docker-entrypoint.sh /
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
 CMD ["/usr/bin/chronos", "run_jar", "--http_port", "4400", "--zk_hosts",  "localhost:2181", "--master", "zk://localhost:2181"]
