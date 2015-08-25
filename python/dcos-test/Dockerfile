@@ -2,7 +2,6 @@
 # we can run integration tests
 FROM mesosphere/python-test:latest
 MAINTAINER Mesosphere, Inc. <support@mesosphere.io>
-RUN pip install -U pip
 RUN pip install -U virtualenv
 RUN virtualenv /dcos-cli
 RUN /dcos-cli/bin/pip install -U dcoscli
