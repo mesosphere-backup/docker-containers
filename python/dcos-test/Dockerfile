@@ -3,4 +3,7 @@
 FROM mesosphere/python-test:latest
 MAINTAINER Mesosphere, Inc. <support@mesosphere.io>
 RUN pip install -U pip
-RUN pip install -U dcoscli
+RUN pip install -U virtualenv
+RUN virtualenv /dcos-cli
+RUN /dcos-cli/bin/pip install -U dcoscli
+ENV PATH /dcos-cli/bin:$PATH
