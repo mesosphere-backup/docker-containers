@@ -1,0 +1,46 @@
+<configuration>
+  <property>
+    <name>dfs.ha.automatic-failover.enabled</name>
+    <value>true</value>
+  </property>
+
+  <property>
+    <name>dfs.nameservice.id</name>
+    <value>hdfs</value>
+  </property>
+
+  <property>
+    <name>dfs.nameservices</name>
+    <value>hdfs</value>
+  </property>
+
+  <property>
+    <name>dfs.ha.namenodes.hdfs</name>
+    <value>nn1,nn2</value>
+  </property>
+
+  <property>
+    <name>dfs.namenode.rpc-address.hdfs.nn1</name>
+    <value>namenode1.hdfs.mesos:50071</value>
+  </property>
+
+  <property>
+    <name>dfs.namenode.http-address.hdfs.nn1</name>
+    <value>namenode1.hdfs.mesos:50070</value>
+  </property>
+
+  <property>
+    <name>dfs.namenode.rpc-address.hdfs.nn2</name>
+    <value>namenode2.hdfs.mesos:50071</value>
+  </property>
+
+  <property>
+    <name>dfs.namenode.http-address.hdfs.nn2</name>
+    <value>namenode2.hdfs.mesos:50070</value>
+  </property>
+
+  <property>
+    <name>dfs.client.failover.proxy.provider.hdfs</name>
+    <value>org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider</value>
+  </property>
+</configuration>
