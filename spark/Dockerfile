@@ -18,7 +18,7 @@
 # docker build -t spark:git-`git rev-parse --short HEAD` .
 
 # Basing from Mesos image so the Mesos native library is present.
-FROM mesosphere/mesos:0.22.0-1.0.ubuntu1404
+FROM mesosphere/mesos:0.23.0-1.0.ubuntu1404
 MAINTAINER Timothy Chen <tnachen@apache.org>
 
 # Set environment variables.
@@ -39,6 +39,6 @@ ADD hdfs-site.xml /etc/hadoop/hdfs-site.xml
 ADD core-site.xml /etc/hadoop/core-site.xml
 ADD mesos-site.xml /etc/hadoop/mesos-site.xml
 
-RUN ln -sf /usr/lib/libmesos.so /usr/lib/libmesos-0.22.1.so
+RUN ln -sf /usr/lib/libmesos.so /usr/lib/libmesos-0.23.1.so
 
 WORKDIR /opt/spark/dist
