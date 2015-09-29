@@ -1,6 +1,6 @@
 Steps to build a Spark docker image with Mesos dependencies:
 
-1. Build Spark distribution artifacts
+1. In the spark source directory, build Spark distribution artifacts
 ./make-distribution.sh -Phadoop-2.4
 
 2. Copy all files in this folder into the dist folder
