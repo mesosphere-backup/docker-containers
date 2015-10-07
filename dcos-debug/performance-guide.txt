@@ -1,0 +1,69 @@
+Quick Computing Guide
+
+Mindset:
+* everything is a queue (Processing, IPC, IO, etc...)
+* programs are just recipes for orchestrating syscalls
+* syscalls configure and move work between queues
+* debugging is finding incorrect queue servicing
+* optimization is finding badly configured queues
+* binary search on the queues of a system can be a fast way to find issues
+* choose a midpoint to eliminate as many lines of questioning as possible
+
+Queue Characteristics:
+* arrival rate - how quickly work is enqueued, eg requests coming in on a socket
+* service latency - time it takes to do work, eg write to disk
+* service concurrency - eg number of cores to service a kernel process run queue
+* utilization - when more work results in more overall progress
+* saturation - when more work does not result in more progress
+* some queues increase their service time when they are more utilized, eg rotational disks
+* some queues keep a relatively constant service time until the saturation point, eg network devices
+
+First Glance: Overall System Behavior Tools
+  overview of cpu, network io, disk io, paging, ctx switches: dstat
+  overview of io per-process: iotop
+  overview of network io per-host: iftop
+  overview of disk io: iostat -dx 1
+  overview of cpu, memory per-process: htop (load is not necessarily bad)
+
+Drilling In: Specific Introspection
+
+  Where is my process spending its time?
+
+    # sample process at 99hz (you probably don't need to change this)
+    perf record -F 99 -p <REPLACE_PID_HERE> -g -- sleep 30
+
+    # show results (you may need to do this on the host where it was recorded to resolve symbols
+    perf report -n --stdio
+
+    # generate a flame graph image for visualization
+    perf script | /root/FlameGraph/stackcollapse-perf.pl > out.perf-folded
+    /root/FlameGraph/flamegraph.pl out.perf-folded > perf-kernel.svg
+
+  What is happening on the network?
+    # dump ascii communication on port 4242
+    tcpdump -As 1514 port 4242
+
+    # how are my machines configured to reach each other?
+    routel
+
+    # what route is taken when this machine tries to reach another?
+    mtr <dest host>
+
+  Why has my system ground to a halt?
+
+    # Is the system paging memory to swap?
+    dstat
+
+    # Are the CPU cores saturated?
+    htop
+
+    # Is the system out of file descriptors?
+    lsof | wc -l # compare against ulimits
+
+    # Is disk IO synchronous after filling the dirty page limit?
+    cat /proc/meminfo | grep Dirty # Dirty is the data waiting to be written to disk in KB
+    sysctl vm.dirty_ratio # the % of total memory allowed to be filled by dirty pages before blocking
+    # If Dirty is > (total mem) * vm.dirty_ratio then writes to disk will block on disk IO
+
+That's it!  This is a quick guide, after all.  For many pointers, check out Brendan Gregg's blog:
+  http://www.brendangregg.com/blog/index.html
