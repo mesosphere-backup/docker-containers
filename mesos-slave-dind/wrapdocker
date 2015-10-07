@@ -6,6 +6,8 @@
 # Original source: https://github.com/jpetazzo/dind
 # Modified to add docker network reservations.
 
+set -e
+
 # Ensure that all nodes in /dev/mapper correspond to mapped devices currently loaded by the device-mapper kernel driver
 dmsetup mknodes
 
@@ -50,9 +52,12 @@ do
         # Systemd and OpenRC (and possibly others) both create such a
         # cgroup. To avoid the aforementioned bug, we symlink "foo" to
         # "name=foo". This shouldn't have any adverse effect.
+
+        # the || true prevents the following error to quit (see https://github.com/jpetazzo/dind/pull/84#issuecomment-134236303):
+        # ln: failed to create symbolic link '/sys/fs/cgroup/systemd/name=systemd': Operation not permitted
         echo $SUBSYS | grep -q ^name= && {
                 NAME=$(echo $SUBSYS | sed s/^name=//)
-                ln -s $SUBSYS $CGROUP/$NAME
+                ln -s $SUBSYS $CGROUP/$NAME || true
         }
 
         # Likewise, on at least one system, it has been reported that
@@ -102,9 +107,29 @@ STORAGE_DIR="/var/lib/docker"
 mkdir -p "${STORAGE_DIR}"
 STORAGE_DIR_FS=$(df -PTh "${STORAGE_DIR}" | awk '{print $2}' | tail -1)
 
-# Unless using overlay over overlay, create an ext3 loop device as an intermediary layer.
+# Smoke test overlay over overlay:
+# 1. create smoke dir in the storage dir being mounted on an overlay fs
+# 2. try to mount an overlay fs on top of the smoke dir
+# 3. try to write a file in the overlay-over-overlay mount
+# 4. if that fails set OOO_BROKEN=true
+#
+# Rational: There are kernels with broken overlay-over-overlay support (4.2 and
+# probably 3.19). On those it's possible to mount an overlay in an overlay, but
+# writing to a file results in a "No device" error.
+if [ "${STORAGE_DIR_FS}" = "overlay" ] && [ "${STORAGE_FS}" = "overlay" ]; then
+    D="${STORAGE_DIR}/smoke"
+    mkdir -p "${D}/upper" "${D}/lower" "${D}/work" "${D}/mount"
+
+    mount -t overlay overlay -o"lowerdir=${D}/lower,upperdir=${D}/upper,workdir=${D}/work" "${D}/mount" &&
+    echo foo > "${D}/mount/probe" || OOO_BROKEN=true
+
+    umount -f "${D}/mount" || true
+    rm -rf "${D}" || true
+fi
+
+# Unless using overlay over overlay or overlay over overlay is broken, create an ext3 loop device as an intermediary layer.
 # The max size of the loop device is $VAR_LIB_DOCKER_SIZE in GB (default=5).
-if [ "${STORAGE_DIR_FS}" != "overlay" ] || [ "${STORAGE_FS}" != "overlay" ]; then
+if [ "${STORAGE_DIR_FS}" != "overlay" ] || [ "${STORAGE_FS}" != "overlay" ] || [ "${OOO_BROKEN}" == true ]; then
     STORAGE_FILE="/data/docker"
     VAR_LIB_DOCKER_SIZE=${VAR_LIB_DOCKER_SIZE:-5}
     mkdir -p "$(dirname "${STORAGE_FILE}")"
@@ -133,7 +158,6 @@ DEFAULT_ROUTE=$(ip route | grep default | sed 's/eth0/docker0/')
 ip addr del $IP_CIDR dev eth0
 ip addr add $IP_CIDR dev docker0
 ip route add $DEFAULT_ROUTE
-
 
 # compute a network for the containers to live in
 # by adding DOCKER_NETWORK_OFFSET to the current IP and cutting off
