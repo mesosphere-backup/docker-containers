@@ -9,6 +9,7 @@ RUN apt-get update -qq && \
         lxc \
         iptables \
         ipcalc \
+        socat \
         && \
     apt-get clean
 
@@ -26,6 +27,7 @@ RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 581
     apt-get clean
 
 COPY ./wrapdocker /usr/local/bin/
+COPY ./downloads/* /usr/local/bin/
 
 ENTRYPOINT ["wrapdocker"]
 CMD ["mesos-slave"]
