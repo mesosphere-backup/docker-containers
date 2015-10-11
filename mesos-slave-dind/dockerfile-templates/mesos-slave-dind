@@ -9,6 +9,7 @@ RUN apt-get update -qq && \
         lxc \
         iptables \
         ipcalc \
+        socat \
         && \
     apt-get clean
 
