@@ -34,6 +34,10 @@ images: check-version mesos-slave-dind
 push: check-version
 	docker push mesosphere/mesos-slave-dind:$(VERSION)
 
-mesos-slave-dind: check-version check-mesos-version check-docker-version
+downloads/nsenter:
+	mkdir -p downloads
+	docker run --rm -v $$PWD/downloads:/target jpetazzo/nsenter
+
+mesos-slave-dind: check-version check-mesos-version check-docker-version downloads/nsenter
 	sed "s/DOCKER_VERSION/$(DOCKER_VERSION)/g;s/MESOS_VERSION/$(MESOS_VERSION)/g" dockerfile-templates/$@ > $@
 	docker build -t mesosphere/$@:$(VERSION) -f $@ .
