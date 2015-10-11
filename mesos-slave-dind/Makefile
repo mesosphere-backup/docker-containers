@@ -2,18 +2,13 @@ all: help
 
 help:
 	@echo 'Options available:'
-	@echo '  make images VERSION=0.23.0-1.0.ubuntu1404.docker181 MESOS_VERSION=0.23.0-1.0.ubuntu1404 DOCKER_VERSION=1.8.1-0~trusty'
-	@echo '  make push   VERSION=0.23.0-1.0.ubuntu1404.docker181'
+	@echo '  make images MESOS_VERSION=0.23.0-1.0.ubuntu1404 DOCKER_VERSION=1.8.1-0~trusty'
+	@echo '  make push   MESOS_VERSION=0.23.0-1.0.ubuntu1404 DOCKER_VERSION=1.8.1-0~trusty'
 	@echo ''
-	@echo 'VERSION should include the Mesos, Ubuntu, and Docker versions'
+	@echo 'MESOS_VERSION is the mesos base image version'
 	@echo 'DOCKER_VERSION should be the docker-engine version to install with apt-get (>= 1.8.0)'
 
 check-version:
-ifndef VERSION
-	@echo "Error: VERSION is undefined."
-	@make --no-print-directory help
-	@exit 1
-endif
 
 check-mesos-version:
 ifndef MESOS_VERSION
@@ -28,6 +23,8 @@ ifndef DOCKER_VERSION
 	@make --no-print-directory help
 	@exit 1
 endif
+
+VERSION=mesos-$(MESOS_VERSION)-docker-$(subst ~,-,$(DOCKER_VERSION))
 
 images: check-version mesos-slave-dind
 
