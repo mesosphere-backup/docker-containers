@@ -7,6 +7,8 @@ help:
 	@echo ''
 	@echo 'MESOS_VERSION is the mesos base image version'
 	@echo 'DOCKER_VERSION should be the docker-engine version to install with apt-get (>= 1.8.0)'
+	@echo 'ORG is the docker hub organisation, defaulting to "mesosphere"'
+
 
 check-version:
 
@@ -24,13 +26,14 @@ ifndef DOCKER_VERSION
 	@exit 1
 endif
 
+ORG=mesosphere
 VERSION=mesos-$(MESOS_VERSION)-docker-$(subst ~,-,$(DOCKER_VERSION))
 
 images: check-version mesos-slave-dind
 
 push: check-version
-	docker push mesosphere/mesos-slave-dind:$(VERSION)
+	docker push $(ORG)/mesos-slave-dind:$(VERSION)
 
 mesos-slave-dind: check-version check-mesos-version check-docker-version
 	sed "s/DOCKER_VERSION/$(DOCKER_VERSION)/g;s/MESOS_VERSION/$(MESOS_VERSION)/g" dockerfile-templates/$@ > $@
-	docker build -t mesosphere/$@:$(VERSION) -f $@ .
+	docker build -t $(ORG)/$@:$(VERSION) -f $@ .
