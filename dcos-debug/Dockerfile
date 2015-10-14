@@ -1,5 +1,5 @@
 FROM fedora
-RUN yum install -y perf traceroute wget curl iputils jq gdb sysstat procps htop vim emacs git findutils strace ltrace trace-cmd iftop iotop dstat git maven tcpdump mtr
+RUN yum install -y perf traceroute wget curl iputils jq gdb sysstat procps htop vim emacs git findutils strace ltrace trace-cmd iftop iotop dstat git maven tcpdump mtr bind-utils tar zip nc
 RUN git clone --depth 1 https://github.com/brendangregg/perf-tools /root/perf-tools
 RUN git clone --depth 1 https://github.com/feldoh/guano /root/guano
 RUN git clone --depth 1 https://github.com/brendangregg/FlameGraph /root/FlameGraph
