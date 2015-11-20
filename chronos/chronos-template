@@ -1,10 +1,14 @@
 FROM mesosphere/mesos:MESOS_VERSION
 MAINTAINER Mesosphere <support@mesosphere.io>
 
-RUN apt-get update && apt-get -y install chronos=CHRONOS_VERSION curl
+RUN apt-get update && apt-get -y install chronos=CHRONOS_VERSION curl syslogd
 RUN rm -rf /etc/mesos
 RUN rm -rf /etc/chronos/conf
 
 EXPOSE 4400
+
+COPY bin/docker-entrypoint.sh /
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
 
 CMD ["/usr/bin/chronos", "run_jar", "--http_port", "4400", "--zk_hosts",  "localhost:2181", "--master", "zk://localhost:2181"]
