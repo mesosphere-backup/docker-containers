@@ -9,5 +9,5 @@ Build the docker container for a specific chronos, mesos:
 
 Example:
 ```
-./mk.sh 2.3.0-0.1.20141121000021 0.21.0-1.0.ubuntu1404
+./mk.sh 2.4.0-0.1.20151007110204.ubuntu1404 0.25.0-0.2.70.ubuntu1404
 ```
