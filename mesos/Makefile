@@ -2,10 +2,10 @@ all: help
 
 help:
 	@echo 'Options available:'
-	@echo '  make images VERSION=0.20.1-1.0.ubuntu1404'
-	@echo '  make push   VERSION=0.20.1-1.0.ubuntu1404'
+	@echo '  make images VERSION=0.21.0-1.0.debian77'
+	@echo '  make push   VERSION=0.21.0-1.0.debian77'
 	@echo ''
-	@echo 'VERSION should be set to the full Ubuntu 14.04 Mesos package version'
+	@echo 'VERSION should be set to the full Debian 7 Mesos package version'
 
 check-version:
 ifndef VERSION
