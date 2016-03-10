@@ -27,7 +27,7 @@ ENV DEBCONF_NONINTERACTIVE_SEEN "true"
 
 # Upgrade package index and install basic commands.
 RUN apt-get update && \
-    apt-get install -y openjdk-7-jdk curl
+    apt-get install -y openjdk-7-jdk curl dnsutils
 
 ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64
 
