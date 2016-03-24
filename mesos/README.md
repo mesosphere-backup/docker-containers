@@ -1,6 +1,6 @@
 # Mesos in Docker
 
-[Mesos](http://mesos.apache.org/) comes in several [Docker](https://www.docker.com/) containers:
+[Mesosphere](https://mesosphere.com/) builds [Apache Mesos](http://mesos.apache.org/) into several [Docker](https://www.docker.com/) containers:
 
 - [mesosphere/mesos](https://hub.docker.com/r/mesosphere/mesos/) - Both the master and slave in the same container. Requires a custom command to run.
 - [mesosphere/mesos-master](https://hub.docker.com/r/mesosphere/mesos-master/) - Mesos-Master only
