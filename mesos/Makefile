@@ -1,3 +1,4 @@
+SHORT_VERSION=`echo "$(VERSION)" | sed -E "s|^(.*)-(.*)$$|\1|"`
 all: help
 
 help:
@@ -18,17 +19,23 @@ images: check-version mesos mesos-master mesos-slave
 
 push: check-version
 	docker push mesosphere/mesos:$(VERSION)
+	docker push mesosphere/mesos:$(SHORT_VERSION)
 	docker push mesosphere/mesos-master:$(VERSION)
+	docker push mesosphere/mesos-master:$(SHORT_VERSION)
 	docker push mesosphere/mesos-slave:$(VERSION)
+	docker push mesosphere/mesos-slave:$(SHORT_VERSION)
 
 mesos: check-version
 	sed "s/VERSION/$(VERSION)/g" dockerfile-templates/$@ > $@
 	docker build -t mesosphere/$@:$(VERSION) - < $@
+	docker tag mesosphere/$@:$(VERSION) mesosphere/$@:$(SHORT_VERSION) < $@
 
 mesos-master: mesos check-version
 	sed "s/VERSION/$(VERSION)/g" dockerfile-templates/$@ > $@
 	docker build -t mesosphere/$@:$(VERSION) - < $@
+	docker tag mesosphere/$@:$(VERSION) mesosphere/$@:$(SHORT_VERSION) < $@
 
 mesos-slave: mesos check-version
 	sed "s/VERSION/$(VERSION)/g" dockerfile-templates/$@ > $@
 	docker build -t mesosphere/$@:$(VERSION) - < $@
+	docker tag mesosphere/$@:$(VERSION) mesosphere/$@:$(SHORT_VERSION) < $@
