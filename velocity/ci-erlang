@@ -1,0 +1,30 @@
+# An erlang image that contains covertool
+FROM erlang:18.1
+LABEL version="18.1"
+
+ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
+
+# basic dependencies
+RUN echo 'deb http://httpredir.debian.org/debian jessie-backports main' > /etc/apt/sources.list.d/jessie-backports.list
+RUN apt-get update				\
+	&& apt-get install -y 		\
+		openjdk-8-jre-headless	\
+		ca-certificates-java
+RUN /var/lib/dpkg/info/ca-certificates-java.postinst configure
+RUN mkdir -p /root/bin
+
+RUN mkdir -p /rebar		\
+	&& git clone https://github.com/rebar/rebar.git rebar	\
+	&& cd /rebar		\
+	&& ./bootstrap
+
+RUN mkdir -p /covertool						\
+	&& git clone https://github.com/idubrov/covertool.git /covertool	\
+	&& cd /covertool						\
+	&& /rebar/rebar get-deps update-deps	\
+	&& make -C deps/rebar					\
+	&& /rebar/rebar compile escriptize		\
+	&& mv covertool /root/bin/covertool
+
+RUN rm -rf /rebar
+
