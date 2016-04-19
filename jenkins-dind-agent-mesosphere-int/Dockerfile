@@ -16,10 +16,14 @@ perl \
 python \
 python3 \
 py-setuptools \
+py-pip \
 unzip
 
 COPY wrapper.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/wrapper.sh
+
+# Install python-magic for mime-type detection by s3cmd
+RUN pip install python-magic
 
 # Install s3cmd tool
 RUN git clone https://github.com/s3tools/s3cmd.git /tmp/s3cmd && cd /tmp/s3cmd && python setup.py install && rm -rf /var/cache/apk/* /tmp/s3cmd
