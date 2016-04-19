@@ -25,7 +25,7 @@ COPY wrapper.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/wrapper.sh
 
 # Install awscli and s3cmd
-RUN pip --upgrade awscli s3cmd python-magic
+RUN pip install --upgrade awscli s3cmd python-magic
 
 # Populate JDK env
 ENV JAVA_HOME=/usr/lib/jvm/default-jvm
