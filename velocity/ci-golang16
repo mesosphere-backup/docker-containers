@@ -1,0 +1,12 @@
+FROM golang:1.6.2
+LABEL go-version="1.6.2"
+
+ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
+
+# basic dependencies
+RUN echo 'deb http://httpredir.debian.org/debian jessie-backports main' > /etc/apt/sources.list.d/jessie-backports.list
+RUN apt-get update 					\
+		&& apt-get install -y openjdk-8-jre-headless	\
+		ca-certificates-java
+RUN /var/lib/dpkg/info/ca-certificates-java.postinst configure
+
