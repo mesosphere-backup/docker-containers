@@ -1,0 +1,15 @@
+#!/bin/sh
+STORAGE_LOCAL_PATH=/prometheus
+if [ -d /mnt/mesos/sandbox/prometheus ]; then
+  STORAGE_LOCAL_PATH=/mnt/mesos/sandbox/prometheus
+fi
+if [ -n "${PROMETHEUS_YML_TEMPLATE-}" ]; then
+  echo -e "$PROMETHEUS_YML_TEMPLATE" > /etc/prometheus/prometheus.yml.template
+fi
+sed -e "s/@NODE_EXPORTER_SRV@/$NODE_EXPORTER_SRV/" /etc/prometheus/prometheus.yml.template > /etc/prometheus/prometheus.yml
+exec /bin/prometheus \
+  -config.file=/etc/prometheus/prometheus.yml \
+  -storage.local.path=$STORAGE_LOCAL_PATH \
+  -web.console.libraries=/etc/prometheus/console_libraries \
+  -web.console.templates=/etc/prometheus/consoles \
+  "$@"
