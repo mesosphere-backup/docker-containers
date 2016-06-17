@@ -1,4 +1,5 @@
-SHORT_VERSION=`echo "$(VERSION)" | sed -E "s|^(.*)-(.*)$$|\1|"`
+RC_TAG=`echo "$(VERSION)" | sed -E "s|.*(rc[0-9]*).*|-\1|"`
+SHORT_VERSION=`echo "$(VERSION)" | sed -E "s|^(.*)-(.*)$$|\1|"`$(RC_TAG)
 all: help
 
 help:
