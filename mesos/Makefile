@@ -28,7 +28,7 @@ push: check-version
 mesos: check-version
 	sed "s/VERSION/$(VERSION)/g" dockerfile-templates/$@ > $@
 	if test `echo $(VERSION) | grep rc`; then \
-	  sed "s/trusty/trusty-testing/g" dockerfile-templates/$@ > $@ ; \
+	  sed -i -e "s/trusty/trusty-testing/g" $@ ; \
 	fi
 	docker build -t mesosphere/$@:$(VERSION) - < $@
 	docker tag mesosphere/$@:$(VERSION) mesosphere/$@:$(SHORT_VERSION) < $@
