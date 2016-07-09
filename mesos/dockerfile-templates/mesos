@@ -1,13 +1,23 @@
 FROM ubuntu:14.04
 MAINTAINER Mesosphere <support@mesosphere.io>
 
+RUN apt-get update
+RUN apt-get install -y ca-certificates \
+			curl \
+			openssl
 
-RUN apt-get update && \
-  apt-get -y install apt-transport-https ca-certificates && \
-  apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D && \
-  echo deb https://apt.dockerproject.org/repo ubuntu-trusty main > /etc/apt/sources.list.d/docker.list && \
-  apt-get update && \
-  apt-get -y install docker-engine
+ENV DOCKER_BUCKET get.docker.com
+ENV DOCKER_CLIENT 1.11.2
+ENV DOCKER_SHA256 8c2e0c35e3cda11706f54b2d46c2521a6e9026a7b13c7d4b8ae1f3a706fc55e1
+
+RUN set -x && \
+  curl -fSL "https://${DOCKER_BUCKET}/builds/Linux/x86_64/docker-${DOCKER_CLIENT}.tgz" -o docker.tgz  && \
+  echo "${DOCKER_SHA256} *docker.tgz" | sha256sum -c - && \
+  tar -xzvf docker.tgz && \
+  mv docker/* /usr/local/bin/ && \
+  rmdir docker && \
+  rm docker.tgz && \
+  docker -v
 
 RUN echo "deb http://repos.mesosphere.io/ubuntu/ trusty main" > /etc/apt/sources.list.d/mesosphere.list && \
   apt-key adv --keyserver keyserver.ubuntu.com --recv E56151BF && \
