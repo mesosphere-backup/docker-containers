@@ -9,7 +9,7 @@ RUN apt-get update && \
   apt-get update && \
   apt-get -y install docker-engine
 
-RUN echo "deb http://repos.mesosphere.io/ubuntu/ trusty main" > /etc/apt/sources.list.d/mesosphere.list && \
+RUN echo "deb http://repos.mesosphere.io/ubuntu/ {MESOSPHERE_REPO} main" > /etc/apt/sources.list.d/mesosphere.list && \
   apt-key adv --keyserver keyserver.ubuntu.com --recv E56151BF && \
   apt-get -y update && \
   apt-get -y install mesos=VERSION && \
