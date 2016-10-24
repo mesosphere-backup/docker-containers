@@ -1,6 +1,5 @@
-FROM ubuntu:14.04
+FROM ubuntu:trusty
 MAINTAINER Mesosphere <support@mesosphere.io>
-
 
 RUN apt-get update && \
   apt-get -y install apt-transport-https ca-certificates && \
@@ -9,8 +8,8 @@ RUN apt-get update && \
   apt-get update && \
   apt-get -y install curl docker-engine
 
-RUN echo "deb http://repos.mesosphere.io/ubuntu/ {MESOSPHERE_REPO} main" > /etc/apt/sources.list.d/mesosphere.list && \
+RUN echo "deb http://repos.mesosphere.io/ubuntu/ trusty{UBUNTU_TESTING} main" > /etc/apt/sources.list.d/mesosphere.list && \
   apt-key adv --keyserver keyserver.ubuntu.com --recv E56151BF && \
   apt-get -y update && \
-  apt-get -y install mesos=VERSION && \
+  apt-get -y install mesos={VERSION} && \
   apt-get clean && rm -rf /var/lib/apt/lists/*

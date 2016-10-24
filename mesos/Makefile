@@ -1,5 +1,10 @@
-RC_TAG=`echo "$(VERSION)" | sed -E "s|.*(rc[0-9]*).*|-\1|"`
-SHORT_VERSION=`echo "$(VERSION)" | sed -E "s|^(.*)-(.*)$$|\1|"`$(RC_TAG)
+# Make version numbers more predictable.
+# Convert
+#   major.minor.patch-X.Y.Z.[rcNNN.]ubuntuYYMM
+# to
+#   major.minor.patch-[rcNNN.]ubuntuYYMM
+MESOS_TAG=`echo "$(VERSION)" | sed -e "s|-[0-9]\+\.[0-9]\+\.[0-9]\+\.|-|"`
+UBUNTU_CODENAME=trusty
 all: help
 
 help:
@@ -19,29 +24,27 @@ endif
 images: check-version mesos mesos-master mesos-slave
 
 push: check-version
-	docker push mesosphere/mesos:$(VERSION)
-	docker push mesosphere/mesos:$(SHORT_VERSION)
-	docker push mesosphere/mesos-master:$(VERSION)
-	docker push mesosphere/mesos-master:$(SHORT_VERSION)
-	docker push mesosphere/mesos-slave:$(VERSION)
-	docker push mesosphere/mesos-slave:$(SHORT_VERSION)
+	docker push mesosphere/mesos:$(MESOS_TAG)
+	docker push mesosphere/mesos-master:$(MESOS_TAG)
+	docker push mesosphere/mesos-slave:$(MESOS_TAG)
 
 mesos: check-version
-	sed "s/VERSION/$(VERSION)/g" dockerfile-templates/$@ > $@
+	echo $(VERSION)
+	echo $(MESOS_TAG)
+	cp dockerfile-templates/$@ $@
+	sed -i -e "s/trusty/$(UBUNTU_CODENAME)/g" $@
+	sed -i -e "s/{VERSION}/$(VERSION)/g" $@
 	if test `echo $(VERSION) | grep rc`; then \
-	  sed -i -e "s/{MESOSPHERE_REPO}/trusty-testing/g" $@ ; \
+	  sed -i -e "s/{UBUNTU_TESTING}/-testing/g" $@ ; \
 	else \
-	  sed -i -e "s/{MESOSPHERE_REPO}/trusty/g" $@ ; \
+	  sed -i -e "s/{UBUNTU_TESTING}//g" $@ ; \
 	fi
-	docker build -t mesosphere/$@:$(VERSION) - < $@
-	docker tag mesosphere/$@:$(VERSION) mesosphere/$@:$(SHORT_VERSION) < $@
+	docker build -t mesosphere/$@:$(MESOS_TAG) - < $@
 
 mesos-master: mesos check-version
-	sed "s/VERSION/$(VERSION)/g" dockerfile-templates/$@ > $@
-	docker build -t mesosphere/$@:$(VERSION) - < $@
-	docker tag mesosphere/$@:$(VERSION) mesosphere/$@:$(SHORT_VERSION) < $@
+	sed "s/{VERSION}/$(VERSION)/g" dockerfile-templates/$@ > $@
+	docker build -t mesosphere/$@:$(MESOS_TAG) - < $@
 
 mesos-slave: mesos check-version
-	sed "s/VERSION/$(VERSION)/g" dockerfile-templates/$@ > $@
-	docker build -t mesosphere/$@:$(VERSION) - < $@
-	docker tag mesosphere/$@:$(VERSION) mesosphere/$@:$(SHORT_VERSION) < $@
+	sed "s/{VERSION}/$(VERSION)/g" dockerfile-templates/$@ > $@
+	docker build -t mesosphere/$@:$(MESOS_TAG) - < $@
