@@ -1,3 +1,4 @@
+# Copied  from https://github.com/adelton/docker-freeipa/Dockerfile.centos-7  (23ae0a2)
 # Clone from the CentOS 7
 FROM centos:centos7
 
@@ -15,10 +16,10 @@ RUN echo LANG=C > /etc/locale.conf
 
 RUN /sbin/ldconfig -X
 
-COPY init-data ipa-server-configure-first ipa-server-status-check exit-with-status ipa-volume-upgrade-* /usr/sbin/
-COPY install.sh uninstall.sh /bin/
+COPY assets/init-data assets/ipa-server-configure-first assets/ipa-server-status-check assets/exit-with-status assets/ipa-volume-upgrade-* /usr/sbin/
+COPY assets/install.sh assets/uninstall.sh /bin/
 RUN chmod -v +x /usr/sbin/init-data /usr/sbin/ipa-server-configure-first /usr/sbin/ipa-server-status-check /usr/sbin/exit-with-status /usr/sbin/ipa-volume-upgrade-* /bin/install.sh /bin/uninstall.sh
-COPY container-ipa.target ipa-server-configure-first.service ipa-server-upgrade.service ipa-server-update-self-ip-address.service kill-tail.service /usr/lib/systemd/system/
+COPY assets/container-ipa.target assets/ipa-server-configure-first.service assets/ipa-server-upgrade.service assets/ipa-server-update-self-ip-address.service assets/kill-tail.service /usr/lib/systemd/system/
 RUN rmdir -v /etc/systemd/system/multi-user.target.wants \
 	&& mkdir /etc/systemd/system/container-ipa.target.wants \
 	&& ln -s /etc/systemd/system/container-ipa.target.wants /etc/systemd/system/multi-user.target.wants
@@ -27,13 +28,13 @@ RUN mkdir -p /usr/lib/systemd/system/shutdown.target.wants && ln -sf /usr/lib/sy
 RUN systemctl set-default container-ipa.target
 RUN systemctl enable ipa-server-configure-first.service
 
-COPY exit-via-chroot.conf /usr/lib/systemd/system/systemd-poweroff.service.d/
+COPY assets/exit-via-chroot.conf /usr/lib/systemd/system/systemd-poweroff.service.d/
 
 RUN groupadd -g 389 dirsrv ; useradd -u 389 -g 389 -c 'DS System User' -d '/var/lib/dirsrv' --no-create-home -s '/sbin/nologin' dirsrv
 RUN groupadd -g 288 kdcproxy ; useradd -u 288 -g 288 -c 'IPA KDC Proxy User' -d '/var/lib/kdcproxy' -s '/sbin/nologin' kdcproxy
 
-COPY atomic-install-help /usr/share/ipa/
-COPY volume-data-list volume-data-mv-list volume-data-autoupdate /etc/
+COPY assets/atomic-install-help /usr/share/ipa/
+COPY assets/volume-data-list assets/volume-data-mv-list assets/volume-data-autoupdate /etc/
 RUN set -e ; cd / ; mkdir /data-template ; cat /etc/volume-data-list | while read i ; do echo $i ; if [ -e $i ] ; then tar cf - .$i | ( cd /data-template && tar xf - ) ; fi ; mkdir -p $( dirname $i ) ; if [ "$i" == /var/log/ ] ; then mv /var/log /var/log-removed ; else rm -rf $i ; fi ; ln -sf /data${i%/} ${i%/} ; done
 RUN rm -rf /var/log-removed
 RUN sed -i 's!^d /var/log.*!L /var/log - - - - /data/var/log!' /usr/lib/tmpfiles.d/var.conf
