@@ -10,7 +10,6 @@ Dockerfiles: https://github.com/mesosphere/docker-containers/tree/master/mesos
 
 Other Mesosphere Packages: https://mesosphere.com/downloads/
 
-
 ## Machines
 
 The recommended way to run Mesos in Docker is to run each master and slave container on their own machine, with their own IP.
@@ -19,6 +18,7 @@ The recommended way to run Mesos in Docker is to run each master and slave conta
 
 Host networking (`--net=host`) is recommended. While Mesos *can* operate in bridge networking, it is slower and has many caveats and configuration complexities.
 
+On Mac OSX, Mesos may be unable to perform a hostname lookup within the Docker container, in which case the master/agent will not launch. To fix this, specify `-e LIBPROCESS_ADVERTISE_IP=127.0.0.1` in the Docker command-line flags. This explicitly sets the IP that Mesos should advertise to other processes, eliminating the need for a hostname lookup.
 
 ## Example: Local Dev/Test
 
