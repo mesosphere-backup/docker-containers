@@ -59,6 +59,26 @@ docker run -d --net=host \
 
 [Slave Configuration Reference](https://open.mesosphere.com/reference/mesos-slave/)
 
+If the agent will make use of the Docker runtime, it can be configured in two different ways:
+* The agent can use its own Docker installation within the container, thus running Docker-in-Docker.
+* The host system's Docker installation can be mapped into the container so that the agent runs Docker containers on the host system. This will allow the agent's containers to continue running over agent failovers.
+
+To use the container's Docker installation:
+```
+docker run -d --net=host --privileged \
+  -e MESOS_PORT=5051 \
+  -e MESOS_MASTER=zk://127.0.0.1:2181/mesos \
+  -e MESOS_SWITCH_USER=0 \
+  -e MESOS_CONTAINERIZERS=docker,mesos \
+  -e MESOS_LOG_DIR=/var/log/mesos \
+  -e MESOS_WORK_DIR=/var/tmp/mesos \
+  -v "$(pwd)/log/mesos:/var/log/mesos" \
+  -v "$(pwd)/tmp/mesos:/var/tmp/mesos" \
+  --entrypoint /bin/bash \
+  mesosphere/mesos-slave:0.28.0-2.0.16.ubuntu1404 -c "sudo service docker start; mesos-agent"
+```
+
+To use the host system's Docker installation:
 ```
 docker run -d --net=host --privileged \
   -e MESOS_PORT=5051 \
