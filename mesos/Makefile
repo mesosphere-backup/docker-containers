@@ -21,12 +21,12 @@ ifndef VERSION
 	@exit 1
 endif
 
-images: check-version mesos mesos-master mesos-slave
+images: check-version mesos mesos-master mesos-agent
 
 push: check-version
 	docker push mesosphere/mesos:$(MESOS_TAG)
 	docker push mesosphere/mesos-master:$(MESOS_TAG)
-	docker push mesosphere/mesos-slave:$(MESOS_TAG)
+	docker push mesosphere/mesos-agent:$(MESOS_TAG)
 
 mesos: check-version
 	echo $(VERSION)
@@ -45,6 +45,6 @@ mesos-master: mesos check-version
 	sed "s/{VERSION}/$(VERSION)/g" dockerfile-templates/$@ > $@
 	docker build -t mesosphere/$@:$(MESOS_TAG) - < $@
 
-mesos-slave: mesos check-version
+mesos-agent: mesos check-version
 	sed "s/{VERSION}/$(VERSION)/g" dockerfile-templates/$@ > $@
 	docker build -t mesosphere/$@:$(MESOS_TAG) - < $@

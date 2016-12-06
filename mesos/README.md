@@ -2,9 +2,9 @@
 
 [Mesosphere](https://mesosphere.com/) builds [Apache Mesos](http://mesos.apache.org/) into several [Docker](https://www.docker.com/) containers:
 
-- [mesosphere/mesos](https://hub.docker.com/r/mesosphere/mesos/) - Both the master and slave in the same container. Requires a custom command to run.
+- [mesosphere/mesos](https://hub.docker.com/r/mesosphere/mesos/) - Both the master and agent in the same container. Requires a custom command to run.
 - [mesosphere/mesos-master](https://hub.docker.com/r/mesosphere/mesos-master/) - Mesos-Master only
-- [mesosphere/mesos-slave](https://hub.docker.com/r/mesosphere/mesos-slave/) - Mesos-Slave only
+- [mesosphere/mesos-agent](https://hub.docker.com/r/mesosphere/mesos-agent/) - Mesos-Agent only
 
 Dockerfiles: https://github.com/mesosphere/docker-containers/tree/master/mesos
 
@@ -12,7 +12,7 @@ Other Mesosphere Packages: https://mesosphere.com/downloads/
 
 ## Machines
 
-The recommended way to run Mesos in Docker is to run each master and slave container on their own machine, with their own IP.
+The recommended way to run Mesos in Docker is to run each master and agent container on their own machine, with their own IP.
 
 ## Networking
 
@@ -22,13 +22,13 @@ On Mac OSX, Mesos may be unable to perform a hostname lookup within the Docker c
 
 ## Example: Local Dev/Test
 
-For development or experimentation, one Master and one Slave can be run on the same machine.
+For development or experimentation, one Master and one Agent can be run on the same machine.
 
-The following commands set up a local development environment with Exhibitor/Zookeeper, Mesos-Master, and Mesos-Slave, using host networking. This is not fit for production.
+The following commands set up a local development environment with Exhibitor/Zookeeper, Mesos-Master, and Mesos-Agent, using host networking. This is not fit for production.
 
 Caveats:
-- Docker containers launched by the Mesos-Slave will continue running on the host after the Mesos-Slave container has been stopped.
-- Docker volumes created by the Mesos-Slave will be relative to the host, not the Mesos-Slave container.
+- Docker containers launched by the Mesos-Agent will continue running on the host after the Mesos-Agent container has been stopped.
+- Docker volumes created by the Mesos-Agent will be relative to the host, not the Mesos-Agent container.
 
 ### Launch Exhibitor (Zookeeper)
 
@@ -55,9 +55,9 @@ docker run -d --net=host \
   mesosphere/mesos-master:0.28.0-2.0.16.ubuntu1404
 ```
 
-### Launch Mesos-Slave
+### Launch Mesos-Agent
 
-[Slave Configuration Reference](https://open.mesosphere.com/reference/mesos-slave/)
+[Agent Configuration Reference](https://open.mesosphere.com/reference/mesos-agent/)
 
 If the agent will make use of the Docker runtime, it can be configured in two different ways:
 * The agent can use its own Docker installation within the container, thus running Docker-in-Docker.
@@ -75,7 +75,7 @@ docker run -d --net=host --privileged \
   -v "$(pwd)/log/mesos:/var/log/mesos" \
   -v "$(pwd)/tmp/mesos:/var/tmp/mesos" \
   --entrypoint /bin/bash \
-  mesosphere/mesos-slave:0.28.0-2.0.16.ubuntu1404 -c "sudo service docker start; mesos-agent"
+  mesosphere/mesos-agent:0.28.0-2.0.16.ubuntu1404 -c "sudo service docker start; mesos-agent"
 ```
 
 To use the host system's Docker installation:
@@ -93,5 +93,5 @@ docker run -d --net=host --privileged \
   -v /cgroup:/cgroup \
   -v /sys:/sys \
   -v /usr/local/bin/docker:/usr/local/bin/docker \
-  mesosphere/mesos-slave:0.28.0-2.0.16.ubuntu1404
+  mesosphere/mesos-agent:0.28.0-2.0.16.ubuntu1404
 ```
