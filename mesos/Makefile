@@ -40,11 +40,17 @@ mesos: check-version
 	  sed -i -e "s/{UBUNTU_TESTING}//g" $@ ; \
 	fi
 	docker build -t mesosphere/$@:$(MESOS_TAG) - < $@
+	$(eval IMAGE_ID=$(shell docker images | grep 'mesosphere/$@ ' | grep $(MESOS_TAG) | awk '{print $$3}'))
+	docker tag $(IMAGE_ID) mesosphere/$@:latest
 
 mesos-master: mesos check-version
 	sed "s/{VERSION}/$(VERSION)/g" dockerfile-templates/$@ > $@
 	docker build -t mesosphere/$@:$(MESOS_TAG) - < $@
+	$(eval IMAGE_ID=$(shell docker images | grep 'mesosphere/$@' | grep $(MESOS_TAG) | awk '{print $$3}'))
+	docker tag $(shell docker images | grep "mesosphere/$@" | awk '{print $3}') mesosphere/$@:latest
 
 mesos-agent: mesos check-version
 	sed "s/{VERSION}/$(VERSION)/g" dockerfile-templates/$@ > $@
 	docker build -t mesosphere/$@:$(MESOS_TAG) - < $@
+	$(eval IMAGE_ID=$(shell docker images | grep 'mesosphere/$@' | grep $(MESOS_TAG) | awk '{print $$3}'))
+	docker tag $(shell docker images | grep "mesosphere/$@" | awk '{print $3}') mesosphere/$@:latest
