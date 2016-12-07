@@ -1,5 +1,7 @@
 # Mesos in Docker
 
+## NOTE: These images are not suitable for production use!
+
 [Mesosphere](https://mesosphere.com/) builds [Apache Mesos](http://mesos.apache.org/) into several [Docker](https://www.docker.com/) containers:
 
 - [mesosphere/mesos](https://hub.docker.com/r/mesosphere/mesos/) - Both the master and agent in the same container. Requires a custom command to run.
