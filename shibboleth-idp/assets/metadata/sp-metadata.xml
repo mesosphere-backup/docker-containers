@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" cacheDuration="PT604800S" entityID="https://master.mesos/acs/api/v1/auth/saml/providers/shib-integration-test/sp-metadata">
+    <md:SPSSODescriptor AuthnRequestsSigned="false" WantAssertionsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+        <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://master.mesos/acs/api/v1/auth/saml/providers/shib-integration-test/sls-callback"/>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress</md:NameIDFormat>
+        <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://master.mesos/acs/api/v1/auth/saml/providers/shib-integration-test/acs-callback" index="1"/>
+    </md:SPSSODescriptor>
+</md:EntityDescriptor>

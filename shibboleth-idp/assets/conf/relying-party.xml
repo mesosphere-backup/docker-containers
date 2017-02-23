@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
+       default-init-method="initialize"
+       default-destroy-method="destroy">
+
+    <bean id="shibboleth.UnverifiedRelyingParty" parent="RelyingParty">
+        <property name="profileConfigurations">
+            <list>
+            <!-- <bean parent="SAML2.SSO" p:encryptAssertions="false" /> -->
+            </list>
+        </property>
+    </bean>
+
+    <!--
+    Default configuration, with default settings applied for all profiles, and enables
+    the attribute-release consent flow.
+    -->
+    <bean id="shibboleth.DefaultRelyingParty" parent="RelyingParty">
+        <property name="profileConfigurations">
+            <list>
+                <bean parent="Shibboleth.SSO" p:postAuthenticationFlows="attribute-release" />
+                <bean parent="SAML2.SSO" p:postAuthenticationFlows="attribute-release" />
+                <ref bean="SAML2.ECP" />
+                <ref bean="SAML2.Logout" />
+            </list>
+        </property>
+    </bean>
+
+    <!-- Container for any overrides you want to add. -->
+
+    <util:list id="shibboleth.RelyingPartyOverrides">
+        <bean parent="RelyingPartyByName" c:relyingPartyIds="https://master.mesos/acs/api/v1/auth/saml/providers/shib-integration-test/sp-metadata">
+            <property name="profileConfigurations">
+                <list>
+                    <bean parent="SAML2.SSO" p:encryptAssertions="false" p:postAuthenticationFlows="attribute-release" />
+                </list>
+            </property>
+        </bean>
+    </util:list>
+
+</beans>

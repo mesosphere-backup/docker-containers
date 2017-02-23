@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
+       default-init-method="initialize"
+       default-destroy-method="destroy">
+
+    <!-- SAML 2 NameID Generation -->
+    <util:list id="shibboleth.SAML2NameIDGenerators">
+
+        <ref bean="shibboleth.SAML2TransientGenerator" />
+
+        <ref bean="shibboleth.SAML2PersistentGenerator" />
+
+        <bean parent="shibboleth.SAML2AttributeSourcedGenerator"
+            p:format="urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"
+            p:attributeSourceIds="#{ {'mail'} }" />
+
+    </util:list>
+
+    <!-- SAML 1 NameIdentifier Generation -->
+    <util:list id="shibboleth.SAML1NameIdentifierGenerators">
+
+        <ref bean="shibboleth.SAML1TransientGenerator" />
+
+        <bean parent="shibboleth.SAML1AttributeSourcedGenerator"
+            p:format="urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"
+            p:attributeSourceIds="#{ {'mail'} }" />
+
+    </util:list>
+</beans>
