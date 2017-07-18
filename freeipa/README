@@ -1,0 +1,5 @@
+# This docker image is just a snapshot of
+# https://github.com/adelton/docker-freeipa/blob/master/Dockerfile.centos-7-upstream
+
+# We freeze it here to prevent it from being a moving target for our integration tests.
+
