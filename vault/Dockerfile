@@ -1,4 +1,4 @@
-FROM alpine
+FROM golang:alpine
 
 MAINTAINER Mesosphere Support <support@mesosphere.com>
 
@@ -13,8 +13,7 @@ RUN apk --no-cache \
 ENV VAULT_VERSION=v0.7.3
 
 RUN buildDeps=' \
-            bash \
-        go \
+        bash \
         git \
         gcc \
         g++ \
@@ -35,4 +34,4 @@ RUN buildDeps=' \
     && rm -rf /go \
     && echo Build complete.
 
-ENTRYPOINT [vault]
+ENTRYPOINT ["/usr/bin/vault"]
