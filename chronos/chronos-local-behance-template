@@ -1,0 +1,35 @@
+# NOTE: we cannot use the mesos 1.0.1 base container from mesosphere, as we need openjdk8 for chronos-yelp31 version
+# instead of rebuilding a new base mesos 1.0.1 container, just build all that into this new chronos container
+# Mesos build based off of mesosphere/docker-containers/mesos/dockerfile-templates/mesos
+FROM ubuntu:16.04
+MAINTAINER Behance DevOps <devops-behance@adobe.com>
+
+RUN apt-get update && \
+    apt-get -y install apt-transport-https ca-certificates && \
+    apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D && \
+    echo deb https://apt.dockerproject.org/repo ubuntu-xenial main > /etc/apt/sources.list.d/docker.list && \
+    apt-get update && \
+    apt-get -y install curl docker-engine
+
+# we may not need maven, npm but leave it in for now
+RUN echo "deb http://repos.mesosphere.io/ubuntu/ trusty main" > /etc/apt/sources.list.d/mesosphere.list && \
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv E56151BF && \
+    apt-get update && \
+    apt-get install -y maven \
+    npm \
+    default-jdk \
+    mesos=1.0.1-2.0.93.ubuntu1404 \
+    scala \
+    curl && \
+    apt-get clean all && \
+    rm -rf /var/lib/apt/lists/*
+
+# from chronos-local-template
+COPY CHRONOS_PKG .
+RUN apt-get update && apt-get -y install curl lsb-release && dpkg -i CHRONOS_PKG
+RUN rm -rf /etc/mesos
+RUN rm -rf /etc/chronos/conf
+
+EXPOSE 4400
+
+CMD ["/usr/bin/chronos", "run_jar", "--http_port", "4400", "--zk_hosts",  "localhost:2181", "--master", "zk://localhost:2181"]

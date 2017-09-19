@@ -22,17 +22,17 @@ echo "$FULL_VERSION" > docker-tag
 CHRONOS_PKG=$(shopt -s nullglob; echo chronos_*${CHRONOS_VERSION}*.deb)
 if test -n "$CHRONOS_PKG"
 then
-  echo "building with local chronos package: ${CHRONOS_PKG}"
-  cp chronos-local-template Dockerfile
+  echo "building with local behance chronos package: ${CHRONOS_PKG}"
+  cp chronos-local-behance-template Dockerfile
   sed -i -e "s/CHRONOS_PKG/${CHRONOS_PKG}/g" Dockerfile
 else
-  echo "building with chronos from package repositories"
+  echo "WARNING: building with chronos from package repositories"
   cp chronos-template Dockerfile
   sed -i -e "s/CHRONOS_VERSION/${CHRONOS_VERSION}/g" Dockerfile
 fi
 
 sed -i -e "s/MESOS_VERSION/${MESOS_VERSION}/g" Dockerfile
 
-docker build -t "mesosphere/chronos:${FULL_VERSION}" .
-echo "to push: \"docker push mesosphere/chronos:${FULL_VERSION}\""
+docker build -t "behance/chronos:${FULL_VERSION}" .
+echo "to push: \"docker push behance/chronos:${FULL_VERSION}\""
 rm -f Dockerfile
