@@ -1,4 +1,4 @@
 FROM mesosphere/mesos:{VERSION}
 MAINTAINER Mesosphere <support@mesosphere.io>
 
-ENTRYPOINT ["mesos-slave"]
+CMD ["mesos-slave"]
