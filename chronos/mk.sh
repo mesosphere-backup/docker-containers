@@ -28,9 +28,11 @@ then
 else
   echo "building with chronos from package repositories"
   cp chronos-template Dockerfile
+  echo "CHRONOS_VERSION is set to ${CHRONOS_VERSION} in Dockerfile"
   sed -i -e "s/CHRONOS_VERSION/${CHRONOS_VERSION}/g" Dockerfile
 fi
 
+echo "MESOS_VERSION is set to ${MESOS_VERSION} in Dockerfile"
 sed -i -e "s/MESOS_VERSION/${MESOS_VERSION}/g" Dockerfile
 
 docker build -t "mesosphere/chronos:${FULL_VERSION}" .
