@@ -2,7 +2,7 @@ FROM mesosphere/mesos:MESOS_VERSION
 MAINTAINER Mesosphere <support@mesosphere.io>
 
 COPY CHRONOS_PKG .
-RUN apt-get update && apt-get -y install curl && dpkg -i CHRONOS_PKG
+RUN apt-get update && apt-get -y install lsb-release curl && dpkg -i CHRONOS_PKG
 RUN rm -rf /etc/mesos
 RUN rm -rf /etc/chronos/conf
 
