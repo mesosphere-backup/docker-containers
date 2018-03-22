@@ -52,7 +52,7 @@ docker run -d --net=host \
   -e MESOS_WORK_DIR=/var/tmp/mesos \
   -v "$(pwd)/log/mesos:/var/log/mesos" \
   -v "$(pwd)/tmp/mesos:/var/tmp/mesos" \
-  mesosphere/mesos-master:0.28.0-2.0.16.ubuntu1404
+  mesosphere/mesos-master:1.5.0
 ```
 
 ### Launch Mesos-Slave
@@ -73,5 +73,5 @@ docker run -d --net=host --privileged \
   -v /cgroup:/cgroup \
   -v /sys:/sys \
   -v /usr/local/bin/docker:/usr/local/bin/docker \
-  mesosphere/mesos-slave:0.28.0-2.0.16.ubuntu1404
+  mesosphere/mesos-slave:1.5.0
 ```
